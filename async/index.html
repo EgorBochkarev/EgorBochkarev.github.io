@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <title>Cat's portfolio</title>
+    <meta charset="utf-8">
+    <meta name="keywords" content="HTML, CSS">
+    <meta name="description" content="Example of async">
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <script src="shri-async-hw.js"></script>
+    <script src="my-function.js"></script>
+    <script src="bonus-functions.js"></script>
+    <script>
+      const {
+          AsyncArray,
+          add,
+          subtract,
+          multiply,
+          divide,
+          mod,
+          less,
+          equal,
+          lessOrEqual,
+          sqrt
+      } = Homework;
+  
+      const a = new AsyncArray([1, 2, 3]);
+      const b = new AsyncArray([2, 3, 5]);
+  
+      console.log('Make a sum [1, 2, 3], with [2, 3, 5], should be [3, 5, 8]')
+      window.additionVector(a, b, (value) => {
+        console.log('Result of vector sum:')
+        value.print()
+      });
+
+      console.log('Test promises with data');
+
+      const generatePromise = (fail, id) => {
+          console.log('Id:', id, 'succes:', !fail)
+          return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                  fail ? reject(id) : resolve(id);
+              }, Math.random() * 5)
+          })
+      }
+      let id = 0;
+      const pr = [
+          generatePromise(Math.floor(Math.random() * 2), id++),
+          generatePromise(Math.floor(Math.random() * 2), id++),
+          generatePromise(Math.floor(Math.random() * 2), id++),
+          generatePromise(Math.floor(Math.random() * 2), id++)
+      ]
+      Promise._allSettled(pr).then((value) => {
+          console.log('Result of allSettled function', value);
+      })
+      Promise._any(pr).then((value) => {
+          console.log('Result of any function, successful', value);
+      }).catch((error) => {
+          console.log('Result of any function, fail', error);
+      })
+
+  </script>
+</html>
