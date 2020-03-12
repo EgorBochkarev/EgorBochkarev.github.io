@@ -2,6 +2,7 @@
     const {
         AsyncArray,
         add,
+        subtract,
         equal,
     } = Homework;
 
@@ -18,16 +19,7 @@
                 wrap(v2.length)
             ]);
             if (await wrap(equal, length1, length2)) {
-                const result = new AsyncArray();
-                for (let i = 0; i < length1; i++) {
-                    const [ value1, value2 ] = await Promise.all([
-                        wrap(v1.get, i),
-                        wrap(v2.get, i)
-                    ])
-                    const sum = await wrap(add, value1, value2);
-                    await wrap(result.push, sum);
-                }
-                return result;
+                return sumVectors(v1, v2, length2);
             }
             return undefined;
         })().then((value) => {
@@ -35,6 +27,21 @@
                 cb(value);
             }
         }); 
+    }
+
+    const sumVectors = async function(v1, v2, initialLength, initialResult){
+        if (initialLength > 0) {
+            length = await wrap(subtract, initialLength, 1);
+            const [ value1, value2, result ] = await Promise.all([
+                wrap(v1.get, length),
+                wrap(v2.get, length),
+                sumVectors(v1, v2, length, initialResult)
+            ])
+            const sum = await wrap(add, value1, value2);
+            await wrap(result.push, sum);
+            return result;
+        }
+        return new AsyncArray();
     }
 
     window.additionVector = additionVector;
