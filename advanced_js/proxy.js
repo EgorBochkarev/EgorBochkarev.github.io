@@ -18,10 +18,9 @@ console.log(symbol in object); // true
 
 const createProxy = (object) => {
     const proxy = Object.create({...object});
-    const propertyDescriptors = Object.getOwnPropertyDescriptors(object);
-    Object.keys(propertyDescriptors).forEach((key, value) => {
-        Object.defineProperty(proxy, key, propertyDescriptors[key])
-    })
+    Object.getOwnPropertyNames(object).forEach((property) => {
+        Object.defineProperty(proxy, property, Object.getOwnPropertyDescriptor(object, property))
+    });
     return proxy;
 }
 
