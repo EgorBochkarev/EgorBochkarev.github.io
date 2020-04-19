@@ -16,15 +16,11 @@ console.log('value' in object); // true
 console.log('year' in object); // true
 console.log(symbol in object); // true
 
-const createProxy = (object) => {
-    const proxy = Object.create({...object});
-    Object.getOwnPropertyNames(object).forEach((property) => {
-        Object.defineProperty(proxy, property, Object.getOwnPropertyDescriptor(object, property))
-    });
-    return proxy;
-}
-
-const proxy = createProxy(object);// реализация
+const proxy = new Proxy(object, {
+    has (target, prop) {
+        return !!Object.getOwnPropertyDescriptor(target, prop);
+    }
+});// реализация
 
 // с proxy
 console.log('value' in proxy) // false
